@@ -65,7 +65,7 @@ for nr=1:length(out_ratio)
         runtime3(k) = rsRuntime;
 
         
-        %%  EP - L1
+        %%  EP
         [epTheta, epInliers, epRuntime] = linearFit(A, y, inlier_th, 'EP', l1Theta_ref, EP_opt);
         Ai = A(epInliers,:);
         epTheta_ref = inv(Ai.'*Ai)*Ai.'*y(epInliers);    
@@ -74,74 +74,38 @@ for nr=1:length(out_ratio)
         RefErr4(k,nr) = norm(epTheta_ref-xt)/norm(xt);
         runtime4(k) = runtime1(k)+epRuntime;
         
-        
-        %%  EP - IRW
-        [epTheta, epInliers, epRuntime] = linearFit(A, y, inlier_th, 'EP', irwTheta, EP_opt);
-        Ai = A(epInliers,:);
-        epTheta_ref = inv(Ai.'*Ai)*Ai.'*y(epInliers);    
-        mc5(k) = numel(epInliers);
-        Err5(k,nr) = norm(epTheta-xt)/norm(xt);
-        RefErr5(k,nr) = norm(epTheta_ref-xt)/norm(xt);
-        runtime5(k) = runtime1(k)+epRuntime;
-        
-        
-        %% MCME - L1
+                
+        %% MCME
         tic
         [mmTheta, mmInliers] = mcme_linear(A, y, sig, l1Theta_ref);
-        mc6(k) = numel(mmInliers);
-        Err6(k,nr) = norm(mmTheta-xt)/norm(xt);
-        runtime6(k) = runtime1(k)+toc;
+        mc5(k) = numel(mmInliers);
+        Err5(k,nr) = norm(mmTheta-xt)/norm(xt);
+        runtime5(k) = runtime1(k)+toc;
         
-        
-        %% MCME - IRW
-        tic
-        [mmTheta, mmInliers] = mcme_linear(A, y, sig, irwTheta);
-        mc7(k) = numel(mmInliers);
-        Err7(k,nr) = norm(mmTheta-xt)/norm(xt);
-        runtime7(k) = runtime2(k)+toc;
     end
-    av_mc(:,nr) = mean([mc1; mc2; mc3; mc4; mc5; mc6; mc7], 2)
-    av_rt(:,nr) = mean([runtime1; runtime2; runtime3; runtime4; runtime5; runtime6; runtime7], 2)
+    av_mc(:,nr) = mean([mc1; mc2; mc3; mc4; mc5], 2)
+    av_rt(:,nr) = mean([runtime1; runtime2; runtime3; runtime4; runtime5], 2)
 end
+
 
 figure(1);
 plot(out_ratio,av_mc(3,:),'r--',out_ratio,av_mc(1,:),'g--o',out_ratio,av_mc(2,:),'b--+',...
-    out_ratio,av_mc(4,:),'k--*',out_ratio,av_mc(6,:),'m--^'); 
+    out_ratio,av_mc(4,:),'k--*',out_ratio,av_mc(5,:),'m--^'); 
 xlabel('Outlier ratio'); grid on;
 ylabel('Consensus Size')
 legend('RANSAC','L1','IRW','EP','MCME', 'Location', 'Best');
 
+
 figure(2);
 semilogy(out_ratio,av_rt(3,:),'r--',out_ratio,av_rt(1,:),'g--o',out_ratio,av_rt(2,:),'b--+',...
-    out_ratio,av_rt(4,:),'k--*',out_ratio,av_rt(6,:),'m--^'); 
+    out_ratio,av_rt(4,:),'k--*',out_ratio,av_rt(5,:),'m--^'); 
 xlabel('Outlier ratio'); grid on;
 ylabel('Runtime (seconds)')
 legend('RANSAC','L1','IRW','EP','MCME', 'Location', 'Best');
 
 
-f=figure(3);
-x = [Err3; RefErr3; Err1; RefErr1; Err2; RefErr2; Err4; RefErr4; Err5; RefErr5; Err6; Err7];
-g1 = kron([1:12]', ones(size(Err1))); g1 = g1(:);
-g2 = repmat(1:nr,size(x,1),1); g2 = g2(:);
-bh=boxplot(x(:), {g2,g1},'whisker',1,'colorgroup',g1, 'factorgap',[6, 1],'symbol','.','outliersize',4,'widths',0.6,...
-    'factorseparator',[1],'colors',hsv(12));%'rrggbbccmm'
-xlabel('Outlier ratio');
-ylabel('Model estimation error');
-set(gca,'yscale','log');grid on; % ylim([1e-3,3e0]);
-set(bh,'linewidth',1.5);
-set(findobj(gca,'tag','Outliers'),'Marker','+');  
-for k=1:size(Err1,2)
-    annotation(f,'textbox',[((k-1)+1.5)/(size(Err1,2)+2), 0.075, 0.035, 0.075],...
-    'String',{out_ratio(k)},'FitBoxToText','off', 'EdgeColor','none');
-end
-set(gca,'XTickLabel',{' '})
-box_vars = findall(gca,'Tag','Box');
-hLegend = legend(box_vars([12:-1:1]), {'RANSAC','RANSAC-r','L1','L1-r','IRW','IRW-r',...
-    'EP','EP-r','EP-IRW','EP-IRW-r','MCME-L1','MCME-IRW'}, 'Location', 'Best');
-
-
 f=figure(14);nr=9;
-x = [Err3; RefErr3; Err1; RefErr1; Err2; RefErr2; Err4; RefErr4; Err6];
+x = [Err3; RefErr3; Err1; RefErr1; Err2; RefErr2; Err4; RefErr4; Err5];
 g1 = kron([1:9]', ones(size(Err1,1),nr)); g1 = g1(:);
 g2 = repmat(1:nr,size(x,1),1); g2 = g2(:);
 bh=boxplot(x(:), {g2,g1},'whisker',1,'colorgroup',g1, 'factorgap',[6, 1],'symbol','.','outliersize',4,'widths',0.9,...
@@ -157,10 +121,6 @@ for k=1:nr
 end
 set(gca,'XTickLabel',{' '})
 box_vars = findall(gca,'Tag','Box');
-% hLegend = legend(box_vars([9:-1:1]), {'RANSAC','RANSAC-r','L1','L1-r','IRW','IRW-r',...
-%     'EP','EP-r','MCME'}, 'Location', 'Best');
-legend(box_vars([9:-1:6]),'RANSAC','RANSAC-r','L1','L1-r', 'Location', 'Best');
-ah=axes('position',get(gca,'position'),'visible','off');
-legend(ah,box_vars([5,4,3,2]),'IRW','IRW-r','EP','EP-r', 'Location', 'Best');
-ah=axes('position',get(gca,'position'),'visible','off');
-legend(ah,box_vars(1),'MCME', 'Location', 'Best');
+hLegend = legend(box_vars([9:-1:1]), {'RANSAC','RANSAC-r','L1','L1-r','IRW','IRW-r',...
+    'EP','EP-r','MCME'}, 'Location', 'Best');
+
