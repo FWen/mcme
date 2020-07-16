@@ -38,5 +38,5 @@ for k=1:MAX_ITER-1
 end
 
 slack(slack<1e-10)=0;
-Inliers = find(sum(reshape(slack,kap,m/kap))==0);
+Inliers = find(sum(reshape(slack,kap,m/kap),1)==0);
 theta = Y(1:n);
