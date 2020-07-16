@@ -7,13 +7,6 @@ n = 8;
 MAX_ITER = 10;
 TOL = 1e-7;
 
-% x1 = data.x1;
-% x2 = data.x2;        
-% T2 = data.T2;
-% eps = eps*data.T2(1,1);          
-% [A0, b0, c0, d0] = genMatrixHomography(data.x1, data.x2);
-% [A1, b] = genLinearMatrixFromQuasiconvex(A0, b0, c0, d0, eps);    
-
 C = [b; zeros(m,1)]; 
 B = [sparse(n,1); ones(m,1)]; 
 J = kron(speye(m),ones(kap,1));

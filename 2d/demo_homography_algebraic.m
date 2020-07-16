@@ -34,7 +34,7 @@ for k=1:length(imgs)
     
     %% L1 method   
     tic; 
-    [L1Inliers, L1Theta] = l1_alg(A,y,inlier_th);
+    [L1Inliers, L1Theta] = l1_alg(A,y,inlier_th,2);
     mc(k,2) = length(L1Inliers);
     rt(k,2) = toc;
     H21 = inv(data.T2)*reshape([L1Theta; 1], [3,3])'*data.T1; % estimated homography
@@ -45,7 +45,7 @@ for k=1:length(imgs)
     
     %% Iteratively reweighted method
     tic; 
-    [irwInliers, irwTheta] = irw_alg(A,y,inlier_th);
+    [irwInliers, irwTheta] = irw_alg(A,y,inlier_th,2);
     mc(k,3) = length(irwInliers);
     rt(k,3) = toc;    
     H21 = inv(data.T2)*reshape([irwTheta; 1], [3,3])'*data.T1; % estimated homography
@@ -61,7 +61,7 @@ for k=1:length(imgs)
     rt(k,4) = eprsRuntime+rt(k,2);           
     H21 = inv(data.T2)*reshape([epTheta; 1], [3,3])'*data.T1; % estimated homography
     scores(k,7) = compute_homo_score(H21, data.matches.X1, data.matches.X2);
-    H21 = linear_model_refine(A,y,eprsInliers,data);% refinement
+    H21 = linear_model_refine(A,y,eprsInliers,data); % refinement
     scores(k,8) = compute_homo_score(H21, data.matches.X1, data.matches.X2);
     
 

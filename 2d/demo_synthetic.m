@@ -11,14 +11,12 @@ ons = 4;  % outlier noise strength
 inlier_th = sqrt(chi2inv(1-1e-3,1))*sig;
 
 % parameters for the EP method
-solver =  'gurobi'; EP_opt.lpsolver = prepareSolver(solver);
-EP_opt.solver = solver; EP_opt.maxAlpha = 1e10; 
-EP_opt.QThresh = 1e-4; EP_opt.alpha = 0.5;   EP_opt.kappa = 5;   
+solver =  'gurobi'; EP_opt.lpsolver = prepareSolver(solver);EP_opt.solver = solver; 
+EP_opt.maxAlpha = 1e10; EP_opt.QThresh = 1e-4; EP_opt.alpha = 0.5;   EP_opt.kappa = 5;   
 
 out_ratio = 0:0.1:0.8;
 for nr=1:length(out_ratio)
-    nr = 4
-    parfor k=1:50
+    for k=1:50
         [out_ratio(nr), k]
 
         %% generate data
@@ -27,14 +25,13 @@ for nr=1:length(out_ratio)
         y  = A*xt + sig*randn(N,1);
         n_outl = round(out_ratio(nr)*N);
         J = randperm(N);
-       y(J(1:n_outl),:) = y(J(1:n_outl),:) + (2*rand(n_outl,1)-1)*ons; %uniformly distributed outliers
+        y(J(1:n_outl),:) = y(J(1:n_outl),:) + (2*rand(n_outl,1)-1)*ons; %uniformly distributed outliers
 %        y(J(1:n_outl),:) = y(J(1:n_outl),:) + randn(n_outl,1)*ons/2; %Gaussian distributed outliers
         
         
         %% L1 method
         tic; 
-        [s_l1, l1Theta] = l1_alg(A,y,inlier_th);
-        l1Inliers = find(s_l1==0);
+        [l1Inliers, l1Theta] = l1_alg(A,y,inlier_th,1);
         Ai = A(l1Inliers,:);
         l1Theta_ref = inv(Ai.'*Ai)*Ai.'*y(l1Inliers);
         mc1(k) = numel(l1Inliers);
@@ -45,8 +42,7 @@ for nr=1:length(out_ratio)
         
         %% Iteratively reweighted method
         tic; 
-        [s_irw, irwTheta] = irw_alg(A,y,inlier_th);
-        irwInliers = find(s_irw==0);
+        [irwInliers, irwTheta] = irw_alg(A,y,inlier_th,1);
         Ai = A(irwInliers,:);
         irwTheta_ref = inv(Ai.'*Ai)*Ai.'*y(irwInliers);        
         mc2(k) = numel(irwInliers);

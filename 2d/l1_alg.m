@@ -1,4 +1,4 @@
-function [Inliers,theta] = l1_alg(x,y,eps)
+function [Inliers,theta] = l1_alg(x,y,eps,kap)
 
 [m, n] = size(x);
 A = zeros(2*m,n);
@@ -23,5 +23,5 @@ pars.fid = 0;
 [~,Y,~] = sedumi(A,-B,C,K,pars);
 slack = sum(reshape(Y(n+1:end),2,m));
 slack(slack<1e-7) = 0;
-Inliers = find(sum(reshape(slack,2,m/2))==0);
+Inliers = find(sum(reshape(slack,kap,m/kap),1)==0);
 theta = Y(1:n);

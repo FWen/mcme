@@ -1,4 +1,4 @@
-function [Inliers,theta] = irw_alg(x,y,eps)
+function [Inliers,theta] = irw_alg(x,y,eps,kap)
 
 MAX_ITER = 10;
 TOL = 1e-7;
@@ -38,5 +38,5 @@ for k=1:MAX_ITER-1
 end
 
 slack(slack<1e-10)=0;
-Inliers = find(sum(reshape(slack,2,m/2))==0);
+Inliers = find(sum(reshape(slack,kap,m/kap))==0);
 theta = Y(1:n);
