@@ -54,7 +54,7 @@ for k=1:length(imgs)
     scores(k,6) = compute_homo_score(H21, data.matches.X1, data.matches.X2);
     
     
-    %% EP initialized by RANSAC
+    %% EP
     [eprsTheta, eprsInliers, eprsRuntime] = homographyFit(data, th, 'EP', rsTheta_ref, opt);
     mc(k,4) = length(eprsInliers);
     rt(k,4) = eprsRuntime+rsRuntime;
@@ -64,7 +64,7 @@ for k=1:length(imgs)
     scores(k,8) = compute_homo_score(H21, data.matches.X1, data.matches.X2); 
     
         
-    %% MCME - RANSAC
+    %% MCME
     tic
     [mmTheta, mmInliers] = mcme_nonlinear(A0, b0, c0, d0, [], rsTheta_ref, th);
     mc(k,5) = length(mmInliers);
