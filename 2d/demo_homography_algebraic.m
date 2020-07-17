@@ -55,7 +55,7 @@ for k=1:length(imgs)
 
     
 
-    %% EP - L1 
+    %% EP
     [epTheta, eprsInliers, eprsRuntime] = linearFit_homo(A, y, inlier_th, 'EP', L1Theta_ref, opt);
     mc(k,4) = length(eprsInliers);
     rt(k,4) = eprsRuntime+rt(k,2);           
@@ -65,7 +65,7 @@ for k=1:length(imgs)
     scores(k,8) = compute_homo_score(H21, data.matches.X1, data.matches.X2);
     
 
-    %% MCME - L1
+    %% MCME
     tic
     [mmTheta, ~, mmInliers] = mcme_linear(A, y, [], L1Theta_ref, inlier_th);
     mmInliers = find(sum(reshape(mmInliers,2,N))==2);
