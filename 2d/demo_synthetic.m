@@ -79,8 +79,8 @@ for nr=1:length(out_ratio)
         runtime5(k) = runtime1(k)+toc;
         
     end
-    av_mc(:,nr) = mean([mc1; mc2; mc3; mc4; mc5], 2)
-    av_rt(:,nr) = mean([runtime1; runtime2; runtime3; runtime4; runtime5], 2)
+    av_mc(:,nr) = mean([mc1; mc2; mc3; mc4; mc5], 2);
+    av_rt(:,nr) = mean([runtime1; runtime2; runtime3; runtime4; runtime5], 2);
 end
 
 
