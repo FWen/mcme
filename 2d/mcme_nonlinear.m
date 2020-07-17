@@ -55,7 +55,6 @@ for iter=1:MAX_ITER
        break;
     end
 end
-% semilogy(1:iter,iter_gap,'b-','linewidth',1);grid
 
 res = ((b(1,:)' + Ax*theta).^2 + (b(2,:)' + Ay*theta).^2)'./(theta'*c+w).^2;
 inliers = find(res<=beta);
