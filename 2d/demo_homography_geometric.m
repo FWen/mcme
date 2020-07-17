@@ -70,11 +70,10 @@ for k=1:length(imgs)
     mc(k,5) = length(mmInliers);
     rt(k,5) = toc + rsRuntime;
     H21 = inv(data.T2)*reshape([mmTheta; 1], [3,3])'*data.T1; % estimated homography
-    scores(k,9) = compute_homo_score(H21, data.matches.X1, data.matches.X2)
+    scores(k,9) = compute_homo_score(H21, data.matches.X1, data.matches.X2);
 end
 
 mc
-rt
 mean(scores)
 
 img_indx = 1:length(imgs);
