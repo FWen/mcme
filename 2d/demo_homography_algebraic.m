@@ -89,14 +89,14 @@ xlabel('Image index'); grid on;
 ylabel('Score of estimated homography')
 legend('RANSAC','RANSAC-r','L1','L1-r','IRW','IRW-r','EP','EP-r','MCME', 'Location', 'Best');
 
-figure(3);
+figure(2);
 semilogy(img_indx,rt(:,1),'r--+',img_indx,rt(:,2),'g--*',img_indx,rt(:,3),'b--x',...
      img_indx,rt(:,4),'k--o',img_indx,rt(:,5),'m--^'); 
 xlabel('Image index'); grid on;
 ylabel('Runtime (second)')
 legend('RANSAC','L1','IRW','EP','MCME','Location','Best');
 
-figure(4);
+figure(3);
 semilogy(img_indx,mc(:,1),'r--+',img_indx,mc(:,2),'g--*',img_indx,mc(:,3),'b--x',...
          img_indx,mc(:,4),'k--o',img_indx,mc(:,5),'m--^'); 
 xlabel('Image index'); grid on;
