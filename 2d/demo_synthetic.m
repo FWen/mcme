@@ -100,7 +100,7 @@ ylabel('Runtime (seconds)')
 legend('RANSAC','L1','IRW','EP','MCME', 'Location', 'Best');
 
 
-f=figure(14);nr=9;
+f=figure(3);nr=9;
 x = [Err3; RefErr3; Err1; RefErr1; Err2; RefErr2; Err4; RefErr4; Err5];
 g1 = kron([1:9]', ones(size(Err1,1),nr)); g1 = g1(:);
 g2 = repmat(1:nr,size(x,1),1); g2 = g2(:);
