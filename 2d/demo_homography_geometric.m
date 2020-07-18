@@ -4,7 +4,7 @@ addpath src ../minFunc;
 
 inlier_th = 4 ; % Inlier threshold in pixel
     
-% parameters for the EP method
+% parameters for the EP method, solver can be 'gurobi' or 'sedumi'
 solver =  'gurobi'; opt.lpsolver = prepareSolver(solver);    opt.solver = solver;
 opt.QThresh = 1e-5;    opt.alpha = 10;   opt.kappa = 1.5;    opt.alphaMax = 1e9;
     
