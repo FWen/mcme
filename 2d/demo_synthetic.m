@@ -10,7 +10,7 @@ ons = 4;  % outlier noise strength
 % Inlier threshold
 inlier_th = sqrt(chi2inv(1-1e-3,1))*sig;
 
-% parameters for the EP method
+% parameters for the EP method, solver can be 'gurobi' or 'sedumi'
 solver =  'gurobi'; EP_opt.lpsolver = prepareSolver(solver);EP_opt.solver = solver; 
 EP_opt.maxAlpha = 1e10; EP_opt.QThresh = 1e-4; EP_opt.alpha = 0.5;   EP_opt.kappa = 5;   
 
