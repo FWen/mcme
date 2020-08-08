@@ -71,4 +71,4 @@ for k=1:size(angErr_rs,2)
 end
 set(gca,'XTickLabel',{' '})
 box_vars = findall(gca,'Tag','Box');
-hLegend = legend(box_vars([m:-1:1]), {'RANSAC','GORE-RANSAC','MCME'}, 'Location', 'Best');
+hLegend = legend(box_vars([m:-1:1]), {'RANSAC','MCME'}, 'Location', 'Best');
